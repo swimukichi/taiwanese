@@ -6,27 +6,39 @@
     <title>Taiwan Culture Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1>Taiwan Culture Hub</h1>
-            <p class="hero-subtitle">台湾の文化・言語・魅力を深掘りするブログ</p>
-            <p class="hero-description">
-                台湾での生活経験を通じて、言語、文化、そして人間関係の微妙なニュアンスについてシェアしています。
-                台湾人妻との日常から学んだリアルな情報をお届けします。
-            </p>
+            <p class="hero-subtitle">台湾の文化と華語を深掘りするメディア</p>
+            <div class="hero-intro">
+                <p>
+                    台湾での生活経験を通じて、言語、文化、そして人間関係の微妙なニュアンスについてお伝えします。
+                </p>
+                <p class="intro-author">
+                    台湾人妻との日常の中で学んだ、教科書には載らないリアルな台湾を発信しています。
+                </p>
+            </div>
         </div>
     </section>
 
     <!-- Articles Section -->
     <section class="articles-section">
-        <h2>Featured Articles</h2>
+        <div class="section-header">
+            <h2>Featured Articles</h2>
+            <p class="section-subtitle">最新の記事をチェック</p>
+        </div>
         <div id="featured-articles" class="articles-grid"></div>
     </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 Taiwan Culture Hub. All rights reserved.</p>
+    </footer>
 
     <script src="data/articles.js"></script>
     <script>
@@ -34,13 +46,15 @@
         articles.forEach(article => {
             container.innerHTML += `
                 <article class="card">
+                    <div class="card-header">
+                        <span class="category category-${article.category}">${article.category}</span>
+                    </div>
                     <div class="card-content">
                         <h3>${article.title}</h3>
                         <p class="card-description">${article.description}</p>
-                        <div class="card-meta">
-                            <span class="category">${article.category}</span>
-                            <a href="${article.source}" target="_blank" class="read-link">noteで読む →</a>
-                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="${article.source}" target="_blank" class="read-link">noteで読む →</a>
                     </div>
                 </article>
             `;
