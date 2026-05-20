@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Taiwan Culture Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Taiwan Culture Hub</h1>
+    <div id="featured-articles"></div>
+    <script src="data/articles.js"></script>
+    <script>
+        const container = document.getElementById('featured-articles');
+        articles.forEach(article => {
+            container.innerHTML += `
+                <div class="card">
+                    <h2>${article.title}</h2>
+                    <p>${article.description}</p>
+                    <a href="${article.source}" target="_blank">noteで読む</a>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
