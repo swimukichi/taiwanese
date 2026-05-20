@@ -18,5 +18,16 @@ const articles = [
     description: "台湾人妻から教わった、現地の空気を読むリアルな中国語フレーズ。会話に混ぜるだけでぐっと距離が縮まります。",
     source: "https://note.com/swi0801/m/ma9658fab6031",
     publishedAt: "2026-05-20"
+  },
+  {
+    title: "使いどころ不明の台湾華語：現地で笑いが取れる？",
+    slug: "strange-taiwanese-mandarin",
+    category: "language",
+    subcategory: "entertainment",
+    lang: "ja",
+    description: "教科書には載っていない、少し癖のある台湾華語の世界。現地の人と会話が弾む、とっておきの小ネタ集です。",
+    source: "https://note.com/swi0801/m/m2c34c479cded",
+    publishedAt: "2026-05-20",
+    tags: ["台湾華語", "面白い"]
   }
 ];
