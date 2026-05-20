@@ -505,6 +505,133 @@ body::after {
 }
 
 /* ============================================
+   About Section
+   ============================================ */
+.about-section {
+    background: linear-gradient(135deg, var(--color-night-market-blue) 0%, #1f2d40 100%);
+    color: var(--color-text-light);
+    padding: 80px 20px;
+    position: relative;
+    z-index: 1;
+    border-top: 3px solid var(--color-lantern-gold);
+}
+
+.about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 193, 7, 0.03) 1px, rgba(255, 193, 7, 0.03) 2px);
+    pointer-events: none;
+}
+
+.about-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.about-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-lantern-gold);
+    margin-bottom: 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
+}
+
+.about-profile {
+    background: rgba(255, 193, 7, 0.06);
+    border: 1px solid rgba(255, 193, 7, 0.25);
+    border-radius: 16px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+}
+
+.about-bio {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-bio h3 {
+    font-size: 2rem;
+    color: var(--color-lantern-gold);
+    font-weight: 700;
+    margin-bottom: 0;
+    text-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
+}
+
+.about-title-line {
+    font-size: 1.15rem;
+    color: var(--color-neon-pink);
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 6px rgba(255, 64, 129, 0.2);
+}
+
+.about-text {
+    margin: 15px 0;
+}
+
+.about-text p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.highlight {
+    color: var(--color-lantern-gold);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
+}
+
+.about-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.about-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--color-lantern-gold) 0%, #ffb300 100%);
+    color: var(--color-deep-navy);
+    text-decoration: none;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+    letter-spacing: 0.3px;
+}
+
+.about-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+}
+
+/* ============================================
    Footer
    ============================================ */
 .footer {
@@ -513,10 +640,10 @@ body::after {
     text-align: center;
     padding: 40px 20px;
     font-size: 0.95rem;
-    margin-top: 60px;
+    margin-top: 0;
     position: relative;
     z-index: 1;
-    border-top: 3px solid var(--color-lantern-gold);
+    border-top: 3px solid rgba(255, 193, 7, 0.3);
 }
 
 /* ============================================
@@ -574,6 +701,26 @@ body::after {
     .card h3 {
         font-size: 1.15rem;
     }
+
+    .about-section {
+        padding: 60px 20px;
+    }
+
+    .about-header h2 {
+        font-size: 2rem;
+    }
+
+    .about-profile {
+        padding: 30px;
+    }
+
+    .about-bio h3 {
+        font-size: 1.6rem;
+    }
+
+    .about-text p {
+        font-size: 0.95rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -608,6 +755,31 @@ body::after {
     }
 
     .card-description {
+        font-size: 0.9rem;
+    }
+
+    .about-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .about-profile {
+        padding: 20px;
+    }
+
+    .about-bio h3 {
+        font-size: 1.3rem;
+    }
+
+    .about-title-line {
+        font-size: 0.95rem;
+    }
+
+    .about-text p {
+        font-size: 0.9rem;
+    }
+
+    .about-link {
+        padding: 10px 18px;
         font-size: 0.9rem;
     }
 }
