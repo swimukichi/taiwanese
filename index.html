@@ -51,6 +51,7 @@
                     <div class="card-content">
                         <h3>${article.title}</h3>
                         <p class="card-description">${article.description}</p>
+                        ${article.target ? `<p class="card-target">💭 ${article.target}</p>` : ''}
                     </div>
                     <div class="card-footer">
                         <a href="${article.source}" target="_blank" class="read-link">noteで読む →</a>
