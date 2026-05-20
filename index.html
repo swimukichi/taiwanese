@@ -62,7 +62,28 @@
             <h2 data-i18n="featured-title">🏮 Featured Articles</h2>
             <p class="section-subtitle" data-i18n="featured-subtitle">最新の記事をチェック</p>
         </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="search-filter-container">
+            <div class="search-wrapper">
+                <input
+                    type="text"
+                    id="search-input"
+                    class="search-bar"
+                    placeholder="キーワードで検索..."
+                    data-placeholder-en="Search by keyword..."
+                >
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="filter-buttons" id="filter-buttons">
+                <button class="filter-btn active" data-filter="all">すべて</button>
+            </div>
+        </div>
+
         <div id="featured-articles" class="articles-grid"></div>
+        <div id="no-results" class="no-results" style="display: none;">
+            <p data-i18n="no-results">該当する記事が見つかりません</p>
+        </div>
     </section>
 
     <footer class="footer">
@@ -78,16 +99,54 @@
             'intro-para1': { jp: '台湾での生活経験を通じて、言語、文化、そして人間関係の微妙なニュアンスについてお伝えします。', en: 'Discover the nuances of Taiwanese language, culture, and human relationships through lived experience.' },
             'intro-para2': { jp: '台湾人妻との日常の中で学んだ、教科書には載らないリアルな台湾を発信しています。', en: 'Sharing authentic Taiwan insights learned through daily life with a Taiwanese spouse.' },
             'featured-title': { jp: '🏮 Featured Articles', en: '🏮 Featured Articles' },
-            'featured-subtitle': { jp: '最新の記事をチェック', en: 'Check Out Our Latest Articles' }
+            'featured-subtitle': { jp: '最新の記事をチェック', en: 'Check Out Our Latest Articles' },
+            'no-results': { jp: '該当する記事が見つかりません', en: 'No articles found' }
         };
 
         // Initialize language from localStorage
         let currentLanguage = localStorage.getItem('language') || 'jp';
+        let currentFilter = 'all';
+        let currentSearch = '';
 
         // Set initial language on page load
         function initializeLanguage() {
             setLanguage(currentLanguage);
+            initializeFilters();
             renderArticles();
+        }
+
+        // Initialize filter buttons
+        function initializeFilters() {
+            const filterButtons = document.getElementById('filter-buttons');
+            const subcategories = new Set();
+
+            articles.forEach(article => {
+                if (article.subcategory) {
+                    subcategories.add(article.subcategory);
+                }
+            });
+
+            // Clear existing buttons except 'all'
+            filterButtons.innerHTML = '<button class="filter-btn active" data-filter="all">すべて</button>';
+
+            // Add subcategory buttons
+            subcategories.forEach(subcat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.setAttribute('data-filter', subcat);
+                btn.textContent = subcat.charAt(0).toUpperCase() + subcat.slice(1);
+                filterButtons.appendChild(btn);
+            });
+
+            // Add event listeners to filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.getAttribute('data-filter');
+                    renderArticles();
+                });
+            });
         }
 
         // Set language and update UI
@@ -109,48 +168,111 @@
                 }
             });
 
+            // Update search bar placeholder
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.placeholder = lang === 'en' ? 'Search by keyword...' : 'キーワードで検索...';
+            }
+
+            // Update filter button labels
+            const filterButtons = document.getElementById('filter-buttons');
+            if (filterButtons) {
+                const allBtn = filterButtons.querySelector('[data-filter="all"]');
+                if (allBtn) {
+                    allBtn.textContent = lang === 'en' ? 'All' : 'すべて';
+                }
+            }
+
             // Re-render articles
             renderArticles();
         }
 
-        // Render articles based on current language
-        function renderArticles() {
-            const container = document.getElementById('featured-articles');
-            container.innerHTML = '';
+        // Search and filter articles
+        function getFilteredArticles() {
+            return articles.filter(article => {
+                const matchesFilter = currentFilter === 'all' || article.subcategory === currentFilter;
 
-            articles.forEach(article => {
+                if (!currentSearch) {
+                    return matchesFilter;
+                }
+
+                const searchLower = currentSearch.toLowerCase();
                 const isEnglish = currentLanguage === 'en';
                 const title = isEnglish ? article.title_en : article.title;
                 const description = isEnglish ? article.description_en : article.description;
                 const target = isEnglish ? article.target_en : article.target;
 
-                container.innerHTML += `
-                    <article class="card">
-                        <div class="card-header">
-                            <span class="category category-${article.category}">${article.category}</span>
-                        </div>
-                        <div class="card-content">
-                            <h3>${title}</h3>
-                            <p class="card-description">${description}</p>
-                            ${target ? `<p class="card-target">💭 ${target}</p>` : ''}
-                        </div>
-                        <div class="card-footer">
-                            <a href="${article.source}" target="_blank" class="read-link">${isEnglish ? 'Read on note →' : 'noteで読む →'}</a>
-                        </div>
-                    </article>
-                `;
+                return matchesFilter && (
+                    title.toLowerCase().includes(searchLower) ||
+                    description.toLowerCase().includes(searchLower) ||
+                    (target && target.toLowerCase().includes(searchLower))
+                );
             });
         }
 
-        // Event listeners for language buttons
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                setLanguage(btn.getAttribute('data-lang'));
-            });
-        });
+        // Render articles based on current language, filter, and search
+        function renderArticles() {
+            const container = document.getElementById('featured-articles');
+            const noResults = document.getElementById('no-results');
+            const filteredArticles = getFilteredArticles();
 
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', initializeLanguage);
+            container.innerHTML = '';
+
+            if (filteredArticles.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+
+            noResults.style.display = 'none';
+
+            filteredArticles.forEach((article, index) => {
+                const isEnglish = currentLanguage === 'en';
+                const title = isEnglish ? article.title_en : article.title;
+                const description = isEnglish ? article.description_en : article.description;
+                const target = isEnglish ? article.target_en : article.target;
+
+                const cardElement = document.createElement('article');
+                cardElement.className = 'card';
+                cardElement.style.animation = `slideIn 0.4s ease-out ${index * 0.05}s both`;
+
+                cardElement.innerHTML = `
+                    <div class="card-header">
+                        <span class="category category-${article.category}">${article.category}</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>${title}</h3>
+                        <p class="card-description">${description}</p>
+                        ${target ? `<p class="card-target">💭 ${target}</p>` : ''}
+                    </div>
+                    <div class="card-footer">
+                        <a href="${article.source}" target="_blank" class="read-link">${isEnglish ? 'Read on note →' : 'noteで読む →'}</a>
+                    </div>
+                `;
+
+                container.appendChild(cardElement);
+            });
+        }
+
+        // Search input event listener
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    currentSearch = e.target.value;
+                    renderArticles();
+                });
+            }
+
+            // Event listeners for language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setLanguage(btn.getAttribute('data-lang'));
+                });
+            });
+
+            // Initialize on page load
+            initializeLanguage();
+        });
     </script>
 </body>
 </html>
