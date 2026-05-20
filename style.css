@@ -34,6 +34,63 @@ body {
     letter-spacing: 0.3px;
     position: relative;
     overflow-x: hidden;
+    padding-top: 60px;
+}
+
+/* ============================================
+   Header & Language Toggle
+   ============================================ */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, var(--color-night-market-blue) 0%, rgba(44, 62, 80, 0.95) 100%);
+    padding: 15px 20px;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.header-content {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.language-toggle {
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 193, 7, 0.08);
+    padding: 6px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.lang-btn {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: var(--color-text-medium);
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.lang-btn:hover {
+    color: var(--color-lantern-gold);
+    text-shadow: 0 0 6px rgba(255, 193, 7, 0.3);
+}
+
+.lang-btn.active {
+    background: linear-gradient(135deg, var(--color-lantern-gold) 0%, #ffb300 100%);
+    color: var(--color-deep-navy);
+    box-shadow: 0 0 12px rgba(255, 193, 7, 0.4);
+    font-weight: 700;
 }
 
 /* Night Market Texture Background */

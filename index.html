@@ -10,16 +10,26 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Header with Language Toggle -->
+    <header class="header">
+        <div class="header-content">
+            <div class="language-toggle">
+                <button class="lang-btn lang-btn-jp active" data-lang="jp">JP</button>
+                <button class="lang-btn lang-btn-en" data-lang="en">EN</button>
+            </div>
+        </div>
+    </header>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Taiwan Culture Hub</h1>
-            <p class="hero-subtitle">台湾の文化と華語を深掘りするメディア</p>
+            <h1 data-i18n="site-title">Taiwan Culture Hub</h1>
+            <p class="hero-subtitle" data-i18n="site-subtitle">台湾の文化と華語を深掘りするメディア</p>
             <div class="hero-intro">
-                <p>
+                <p data-i18n="intro-para1">
                     台湾での生活経験を通じて、言語、文化、そして人間関係の微妙なニュアンスについてお伝えします。
                 </p>
-                <p class="intro-author">
+                <p class="intro-author" data-i18n="intro-para2">
                     台湾人妻との日常の中で学んだ、教科書には載らないリアルな台湾を発信しています。
                 </p>
             </div>
@@ -29,8 +39,8 @@
     <!-- Articles Section -->
     <section class="articles-section">
         <div class="section-header">
-            <h2>🏮 Featured Articles</h2>
-            <p class="section-subtitle">最新の記事をチェック</p>
+            <h2 data-i18n="featured-title">🏮 Featured Articles</h2>
+            <p class="section-subtitle" data-i18n="featured-subtitle">最新の記事をチェック</p>
         </div>
         <div id="featured-articles" class="articles-grid"></div>
     </section>
@@ -41,24 +51,86 @@
 
     <script src="data/articles.js"></script>
     <script>
-        const container = document.getElementById('featured-articles');
-        articles.forEach(article => {
-            container.innerHTML += `
-                <article class="card">
-                    <div class="card-header">
-                        <span class="category category-${article.category}">${article.category}</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>${article.title}</h3>
-                        <p class="card-description">${article.description}</p>
-                        ${article.target ? `<p class="card-target">💭 ${article.target}</p>` : ''}
-                    </div>
-                    <div class="card-footer">
-                        <a href="${article.source}" target="_blank" class="read-link">noteで読む →</a>
-                    </div>
-                </article>
-            `;
+        // Language data
+        const i18nData = {
+            'site-title': { jp: 'Taiwan Culture Hub', en: 'Taiwan Culture Hub' },
+            'site-subtitle': { jp: '台湾の文化と華語を深掘りするメディア', en: 'Explore Taiwan Culture & Language' },
+            'intro-para1': { jp: '台湾での生活経験を通じて、言語、文化、そして人間関係の微妙なニュアンスについてお伝えします。', en: 'Discover the nuances of Taiwanese language, culture, and human relationships through lived experience.' },
+            'intro-para2': { jp: '台湾人妻との日常の中で学んだ、教科書には載らないリアルな台湾を発信しています。', en: 'Sharing authentic Taiwan insights learned through daily life with a Taiwanese spouse.' },
+            'featured-title': { jp: '🏮 Featured Articles', en: '🏮 Featured Articles' },
+            'featured-subtitle': { jp: '最新の記事をチェック', en: 'Check Out Our Latest Articles' }
+        };
+
+        // Initialize language from localStorage
+        let currentLanguage = localStorage.getItem('language') || 'jp';
+
+        // Set initial language on page load
+        function initializeLanguage() {
+            setLanguage(currentLanguage);
+            renderArticles();
+        }
+
+        // Set language and update UI
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('language', lang);
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+
+            // Update static i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18nData[key]) {
+                    el.textContent = i18nData[key][lang];
+                }
+            });
+
+            // Re-render articles
+            renderArticles();
+        }
+
+        // Render articles based on current language
+        function renderArticles() {
+            const container = document.getElementById('featured-articles');
+            container.innerHTML = '';
+
+            articles.forEach(article => {
+                const isEnglish = currentLanguage === 'en';
+                const title = isEnglish ? article.title_en : article.title;
+                const description = isEnglish ? article.description_en : article.description;
+                const target = isEnglish ? article.target_en : article.target;
+
+                container.innerHTML += `
+                    <article class="card">
+                        <div class="card-header">
+                            <span class="category category-${article.category}">${article.category}</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>${title}</h3>
+                            <p class="card-description">${description}</p>
+                            ${target ? `<p class="card-target">💭 ${target}</p>` : ''}
+                        </div>
+                        <div class="card-footer">
+                            <a href="${article.source}" target="_blank" class="read-link">${isEnglish ? 'Read on note →' : 'noteで読む →'}</a>
+                        </div>
+                    </article>
+                `;
+            });
+        }
+
+        // Event listeners for language buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.getAttribute('data-lang'));
+            });
         });
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', initializeLanguage);
     </script>
 </body>
 </html>
